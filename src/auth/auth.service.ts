@@ -4,7 +4,7 @@ import {
   Injectable,
   UnauthorizedException,
 } from '@nestjs/common';
-import { JwtService } from '@nestjs/jwt';
+import { JwtService, JwtSignOptions } from '@nestjs/jwt';
 import { compare } from 'bcrypt';
 import * as argon2 from 'argon2';
 
@@ -52,11 +52,10 @@ export class AuthService {
   private async generateTokens(userId: string) {
     const payload: AuthJwtPayload = { sub: userId };
     const accessToken = await this.jwtService.signAsync(payload);
-    // @ts-ignore
     const refreshToken = await this.jwtService.signAsync(payload, {
       secret: envs.refreshJwtSecret,
       expiresIn: envs.refreshJwtExpireIn,
-    });
+    } as JwtSignOptions);
 
     return { accessToken, refreshToken };
   }
