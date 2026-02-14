@@ -10,8 +10,7 @@ import {
 import type { Request } from 'express';
 import { SignUpDto } from './dto/signup.dto';
 import { AuthService } from './auth.service';
-import { LocalAuthGuard } from './guards/local.guard';
-import { RefreshJwtAuthGuard } from './guards/refresh-jwt.guard';
+import { LocalAuthGuard, RefreshJwtAuthGuard } from './guards';
 import { Public } from '@/common/decorators/public.decorator';
 
 @Controller('auth')

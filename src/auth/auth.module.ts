@@ -8,10 +8,8 @@ import { User } from '@/entities/User';
 import { AuthService } from './auth.service';
 import { AuthController } from './auth.controller';
 import { UserService } from '../user/user.service';
-import { LocalStrategy } from './strategies/local.strategy';
-import { JwtStrategy } from './strategies/jwt.strategy';
-import { RefreshJwtStrategy } from './strategies/refresh.strategy';
-import { JwtAuthGuard } from './guards/jwt.guard';
+import { LocalStrategy, JwtStrategy, RefreshJwtStrategy } from './strategies';
+import { JwtAuthGuard } from './guards';
 
 @Module({
   imports: [

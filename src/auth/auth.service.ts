@@ -4,14 +4,15 @@ import {
   Injectable,
   UnauthorizedException,
 } from '@nestjs/common';
-import { UserService } from '../user/user.service';
-import { compare } from 'bcrypt';
 import { JwtService } from '@nestjs/jwt';
+import { compare } from 'bcrypt';
+import * as argon2 from 'argon2';
+
+import { AuthProvider } from '@/common/enums/auth-provider.enum';
+import { UserService } from '../user/user.service';
+import { envs } from '../config/envs';
 import { AuthJwtPayload } from './types/auth-jwt-payload';
 import { SignUpDto } from './dto/signup.dto';
-import { AuthProvider } from '@/common/enums/auth-provider.enum';
-import { envs } from '../config/envs';
-import * as argon2 from 'argon2';
 
 @Injectable()
 export class AuthService {
