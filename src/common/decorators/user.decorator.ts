@@ -1,7 +1,7 @@
 import {
   createParamDecorator,
   ExecutionContext,
-  UnauthorizedException,
+  InternalServerErrorException,
 } from '@nestjs/common';
 import { AuthJwtPayload } from '../../auth/types/auth-jwt-payload';
 import type { Request } from 'express';
@@ -9,10 +9,12 @@ import type { Request } from 'express';
 export const User = createParamDecorator(
   (userField: keyof AuthJwtPayload | undefined, ctx: ExecutionContext) => {
     const req: Request = ctx.switchToHttp().getRequest();
-    const user: AuthJwtPayload | undefined = req.user as any;
+    const user = req.user as AuthJwtPayload | undefined;
 
     if (!user) {
-      throw new UnauthorizedException('O usuário não está autenticado');
+      throw new InternalServerErrorException(
+        'O usuário não foi encontrado na request',
+      );
     }
 
     return userField ? user[userField] : user;
