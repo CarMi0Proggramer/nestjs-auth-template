@@ -16,4 +16,4 @@ async function bootstrap() {
   logger.log('Application running successfully! 🚀');
 }
 
-bootstrap();
+bootstrap().catch((err) => console.log(err));
