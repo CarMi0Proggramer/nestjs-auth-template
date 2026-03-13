@@ -1,10 +1,9 @@
 {
-  "name": "validity-tracking-backend",
+  "name": "nestjs-auth-template",
   "version": "0.0.1",
-  "description": "",
-  "author": "",
-  "private": true,
-  "license": "UNLICENSED",
+  "description": "Nest.js REST API template with authentication via Google and Email/Password, includes unit and e2e tests, husky and lint-staged integrated and CI workflow.",
+  "author": "Carlos Miguel <carlosmiguel.dev06@gmail.com>",
+  "license": "MIT",
   "scripts": {
     "prepare": "husky",
     "build": "nest build",
