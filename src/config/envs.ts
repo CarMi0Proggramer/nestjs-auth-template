@@ -1,5 +1,10 @@
-import 'dotenv/config';
+import dotenv from 'dotenv';
 import * as joi from 'joi';
+
+dotenv.config({
+  path: process.env.NODE_ENV === 'test' ? '.env.test' : undefined,
+  quiet: true,
+});
 
 interface EnvVars {
   PORT: number;
@@ -21,12 +26,14 @@ const envsSchema = joi
   })
   .unknown(true);
 
+// eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
 const { error, value } = envsSchema.validate(process.env);
 
 if (error) {
   throw new Error(`Environment variables validation error: ${error}`);
 }
 
+// eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
 const envVars: EnvVars = value;
 
 export const envs = {
