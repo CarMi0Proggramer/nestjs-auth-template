@@ -1,24 +1,32 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { UserController } from './user.controller';
 import { UserService } from './user.service';
-import { TypeOrmModule } from '@nestjs/typeorm';
-import { User } from '@/entities/User';
-import { DatabaseModule } from '../database/database.module';
 
 describe('UserController', () => {
+  const mockUserService = { getProfile: jest.fn() };
+
   let controller: UserController;
+  let userService: UserService;
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
-      imports: [DatabaseModule, TypeOrmModule.forFeature([User])],
       controllers: [UserController],
-      providers: [UserService],
+      providers: [{ provide: UserService, useValue: mockUserService }],
     }).compile();
 
     controller = module.get<UserController>(UserController);
+    userService = module.get<UserService>(UserService);
   });
 
-  it('should be defined', () => {
-    expect(controller).toBeDefined();
+  it('should return user profile', async () => {
+    const userId = 'USER_ID';
+    const profile = { email: 'carlos@test.com', name: 'Carlos Miguel' };
+
+    mockUserService.getProfile.mockResolvedValue(profile);
+
+    const result = await controller.getProfile(userId);
+
+    expect(result).toEqual(profile);
+    expect(userService.getProfile).toHaveBeenCalledWith(userId);
   });
 });

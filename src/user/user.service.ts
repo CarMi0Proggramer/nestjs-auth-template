@@ -20,7 +20,7 @@ export class UserService {
     return await this.userRepository.findOneBy({ id });
   }
 
-  async findByEmail(email: string) {
+  async findOneByEmail(email: string) {
     return await this.userRepository.findOneBy({ email });
   }
 
@@ -34,7 +34,7 @@ export class UserService {
   async getProfile(id: string) {
     const user = await this.userRepository.findOne({
       where: { id },
-      select: ['id', 'email', 'name'],
+      select: ['email', 'name'],
     });
 
     if (!user) throw new NotFoundException('O usuário não foi encontrado');

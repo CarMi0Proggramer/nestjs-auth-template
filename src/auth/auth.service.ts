@@ -5,7 +5,7 @@ import {
   UnauthorizedException,
 } from '@nestjs/common';
 import { JwtService, JwtSignOptions } from '@nestjs/jwt';
-import { compare } from 'bcrypt';
+import * as bcrypt from 'bcrypt';
 import * as argon2 from 'argon2';
 
 import { AuthProvider } from '@/common/enums/auth-provider.enum';
@@ -22,7 +22,7 @@ export class AuthService {
   ) {}
 
   async signUp(signUpDto: SignUpDto) {
-    const userExists = await this.userService.findByEmail(signUpDto.email);
+    const userExists = await this.userService.findOneByEmail(signUpDto.email);
     if (userExists) {
       throw new UnauthorizedException('Já existe um usuário com este e-mail.');
     }
@@ -65,7 +65,7 @@ export class AuthService {
   }
 
   async validateUser(email: string, password: string) {
-    const user = await this.userService.findByEmail(email);
+    const user = await this.userService.findOneByEmail(email);
     if (!user) throw new UnauthorizedException('Usuário não encontrado');
     if (!user.password) {
       throw new ConflictException(
@@ -73,7 +73,7 @@ export class AuthService {
       );
     }
 
-    const isPasswordMatch = await compare(password, user.password);
+    const isPasswordMatch = await bcrypt.compare(password, user.password);
 
     if (!isPasswordMatch)
       throw new BadRequestException('Credenciais inválidas');

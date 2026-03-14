@@ -1,2 +1,2 @@
 export { Public } from './public.decorator';
-export { User } from './user.decorator';
+export { User } from './user/user.decorator';
