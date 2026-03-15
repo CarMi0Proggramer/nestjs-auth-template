@@ -27,7 +27,7 @@ describe('RefreshJwtStrategy', () => {
   });
 
   it('should validate refresh token successfully', async () => {
-    const payload: AuthJwtPayload = { sub: 'USER_ID' };
+    const payload: AuthJwtPayload = { sub: 'USER_ID', jti: 'JWT_ID' };
     const refreshToken = 'REFRESH_TOKEN';
     const req = {
       get: jest.fn().mockReturnValue(`Bearer ${refreshToken}`),
@@ -42,7 +42,7 @@ describe('RefreshJwtStrategy', () => {
   });
 
   it('should throw UnauthorizedException if refresh token is not provided', () => {
-    const payload: AuthJwtPayload = { sub: 'USER_ID' };
+    const payload: AuthJwtPayload = { sub: 'USER_ID', jti: 'JWT_ID' };
     const req = {
       get: jest.fn().mockReturnValue(undefined),
     } as unknown as Request;

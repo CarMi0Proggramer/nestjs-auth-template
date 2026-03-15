@@ -50,7 +50,7 @@ export class AuthService {
   }
 
   private async generateTokens(userId: string) {
-    const payload: AuthJwtPayload = { sub: userId };
+    const payload: AuthJwtPayload = { sub: userId, jti: crypto.randomUUID() };
     const accessToken = await this.jwtService.signAsync(payload);
     const refreshToken = await this.jwtService.signAsync(payload, {
       secret: envs.refreshJwtSecret,
