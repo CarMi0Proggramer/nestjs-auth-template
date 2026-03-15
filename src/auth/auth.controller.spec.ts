@@ -1,7 +1,9 @@
 import { Test, TestingModule } from '@nestjs/testing';
+import type { Response } from 'express';
 import { AuthController } from './auth.controller';
 import { AuthService } from './auth.service';
 import { SignUpDto } from './dto/signup.dto';
+import { envs } from '../config/envs';
 
 describe('AuthController', () => {
   const mockAuthService = {
@@ -82,5 +84,17 @@ describe('AuthController', () => {
     expect(result).toEqual({
       message: 'Sign out realizado com sucesso!',
     });
+  });
+
+  it('should redirect user to frontend url after login with google', async () => {
+    const { id: userId, ...tokens } = testCredentials;
+    const redirectUrl = `${envs.frontendUrl}?accessToken=${tokens.accessToken}&refreshToken=${tokens.refreshToken}`;
+
+    const mockResponse = { redirect: jest.fn() } as unknown as Response;
+    mockAuthService.login.mockResolvedValue(tokens);
+
+    await controller.googleCallback(userId, mockResponse);
+
+    expect(mockResponse.redirect).toHaveBeenCalledWith(redirectUrl);
   });
 });

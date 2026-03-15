@@ -13,6 +13,7 @@ import { envs } from '@/config/envs';
 import { UserService } from '../user/user.service';
 import { AuthJwtPayload } from './types/auth-jwt-payload';
 import { SignUpDto } from './dto/signup.dto';
+import { GoogleProfile } from './types/google-profile';
 
 @Injectable()
 export class AuthService {
@@ -68,9 +69,7 @@ export class AuthService {
     const user = await this.userService.findOneByEmail(email);
     if (!user) throw new UnauthorizedException('Usuário não encontrado');
     if (!user.password) {
-      throw new ConflictException(
-        'Este e-mail já está cadastrado com outro método de login.',
-      );
+      throw new ConflictException('Este e-mail já está cadastrado com Google.');
     }
 
     const isPasswordMatch = await bcrypt.compare(password, user.password);
@@ -96,5 +95,18 @@ export class AuthService {
       throw new UnauthorizedException('Refresh token inválido');
 
     return { id: userId };
+  }
+
+  async validateGoogleUser(googleProfile: GoogleProfile) {
+    const email = googleProfile.emails[0].value;
+    const user = await this.userService.findOneByEmail(email);
+
+    if (user) return user;
+
+    return await this.userService.create({
+      email,
+      name: googleProfile.displayName,
+      authProvider: AuthProvider.GOOGLE,
+    });
   }
 }

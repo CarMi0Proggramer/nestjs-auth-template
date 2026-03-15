@@ -96,7 +96,7 @@ describe('AuthController (e2e) - Login', () => {
 
     expect(res.status).toBe(409);
     expect(res.body).toEqual({
-      message: 'Este e-mail já está cadastrado com outro método de login.',
+      message: 'Este e-mail já está cadastrado com Google.',
       error: 'Conflict',
       statusCode: 409,
     });

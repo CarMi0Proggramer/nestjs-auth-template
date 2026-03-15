@@ -1,15 +1,19 @@
 import {
   Body,
   Controller,
+  Get,
   HttpCode,
   HttpStatus,
   Post,
+  Res,
   UseGuards,
 } from '@nestjs/common';
+import type { Response } from 'express';
 import { SignUpDto } from './dto/signup.dto';
 import { AuthService } from './auth.service';
-import { LocalAuthGuard, RefreshJwtAuthGuard } from './guards';
+import { GoogleAuthGuard, LocalAuthGuard, RefreshJwtAuthGuard } from './guards';
 import { SkipJwtGuard, User } from '@/common/decorators';
+import { envs } from '@/config/envs';
 
 @Controller('auth')
 export class AuthController {
@@ -45,5 +49,20 @@ export class AuthController {
     await this.authService.signOut(userId);
 
     return { message: 'Sign out realizado com sucesso!' };
+  }
+
+  @SkipJwtGuard()
+  @UseGuards(GoogleAuthGuard)
+  @Get('google')
+  googleLogin() {}
+
+  @SkipJwtGuard()
+  @UseGuards(GoogleAuthGuard)
+  @Get('google/callback')
+  async googleCallback(@User('id') userId: string, @Res() res: Response) {
+    const { accessToken, refreshToken } = await this.authService.login(userId);
+    const redirectUrl = `${envs.frontendUrl}?accessToken=${accessToken}&refreshToken=${refreshToken}`;
+
+    res.redirect(redirectUrl);
   }
 }

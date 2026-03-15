@@ -11,6 +11,7 @@ import { AuthService } from './auth.service';
 import { UserService } from '../user/user.service';
 import { AuthProvider } from '../common/enums/auth-provider.enum';
 import { SignUpDto } from './dto/signup.dto';
+import { GoogleProfile } from './types/google-profile';
 
 jest.mock('argon2', () => ({
   hash: jest.fn(),
@@ -161,9 +162,7 @@ describe('AuthService', () => {
     mockUserService.findOneByEmail.mockResolvedValue({ id: 'USER_ID' });
 
     await expect(service.validateUser(email, password)).rejects.toThrow(
-      new ConflictException(
-        'Este e-mail já está cadastrado com outro método de login.',
-      ),
+      new ConflictException('Este e-mail já está cadastrado com Google.'),
     );
   });
 
@@ -233,5 +232,42 @@ describe('AuthService', () => {
     await expect(
       service.validateRefreshToken(userId, refreshToken),
     ).rejects.toThrow(new UnauthorizedException('Refresh token inválido'));
+  });
+
+  it('should store google user if not exists', async () => {
+    const user = {
+      name: 'Google User',
+      email: 'google@gmail.com',
+      authProvider: AuthProvider.GOOGLE,
+    };
+
+    const profile: GoogleProfile = {
+      displayName: user.name,
+      emails: [{ value: user.email, verified: true }],
+    };
+
+    mockUserService.findOneByEmail.mockResolvedValue(null);
+    await service.validateGoogleUser(profile);
+
+    expect(mockUserService.create).toHaveBeenCalledWith(user);
+  });
+
+  it('should return google user if exists', async () => {
+    const user = {
+      id: 'USER_ID',
+      name: 'Google User',
+      email: 'google@gmail.com',
+      authProvider: AuthProvider.GOOGLE,
+    };
+
+    const profile: GoogleProfile = {
+      displayName: user.name,
+      emails: [{ value: user.email, verified: true }],
+    };
+
+    mockUserService.findOneByEmail.mockResolvedValue(user);
+
+    const result = await service.validateGoogleUser(profile);
+    expect(result).toEqual(user);
   });
 });
