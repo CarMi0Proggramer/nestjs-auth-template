@@ -3,15 +3,15 @@ import {
   ExecutionContext,
   InternalServerErrorException,
 } from '@nestjs/common';
-import { AuthJwtPayload } from '../../../auth/types/auth-jwt-payload';
 import type { Request } from 'express';
+import { User as UserEntity } from '@/entities/User';
 
 export const getUser = (
-  userField: keyof AuthJwtPayload | undefined,
+  userField: keyof Pick<UserEntity, 'id'> | undefined,
   ctx: ExecutionContext,
 ) => {
   const req: Request = ctx.switchToHttp().getRequest();
-  const user = req.user as AuthJwtPayload | undefined;
+  const user = req.user as Pick<UserEntity, 'id'> | undefined;
 
   if (!user) {
     throw new InternalServerErrorException(

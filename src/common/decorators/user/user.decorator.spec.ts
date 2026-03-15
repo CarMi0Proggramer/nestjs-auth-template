@@ -8,7 +8,7 @@ jest.mock('@nestjs/common', () => ({
 }));
 
 describe('UserDecorator', () => {
-  const mockRequest = { user: { sub: 'USER_ID' } };
+  const mockRequest = { user: { id: 'USER_ID' } };
   const mockExecutionContext = {
     switchToHttp: () => ({
       getRequest: () => mockRequest,
@@ -21,8 +21,8 @@ describe('UserDecorator', () => {
   });
 
   it('should extract and return user property from request', () => {
-    const result = getUser('sub', mockExecutionContext);
-    expect(result).toEqual(mockRequest.user.sub);
+    const result = getUser('id', mockExecutionContext);
+    expect(result).toEqual(mockRequest.user.id);
   });
 
   it('should throw an error if user is not found in request', () => {

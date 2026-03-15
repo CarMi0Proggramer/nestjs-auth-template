@@ -7,7 +7,7 @@ export class UserController {
   constructor(private readonly userService: UserService) {}
 
   @Get('profile')
-  getProfile(@User('sub') userId: string) {
+  getProfile(@User('id') userId: string) {
     return this.userService.getProfile(userId);
   }
 }

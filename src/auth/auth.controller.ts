@@ -19,7 +19,7 @@ export class AuthController {
   @HttpCode(HttpStatus.OK)
   @UseGuards(LocalAuthGuard)
   @Post('login')
-  async login(@User('sub') userId: string) {
+  async login(@User('id') userId: string) {
     const { accessToken, refreshToken } = await this.authService.login(userId);
 
     return { id: userId, accessToken, refreshToken };
@@ -33,12 +33,12 @@ export class AuthController {
 
   @UseGuards(RefreshJwtAuthGuard)
   @Post('refresh')
-  refreshToken(@User('sub') userId: string) {
+  refreshToken(@User('id') userId: string) {
     return this.authService.refreshToken(userId);
   }
 
   @Post('signout')
-  async signOut(@User('sub') userId: string) {
+  async signOut(@User('id') userId: string) {
     await this.authService.signOut(userId);
 
     return { message: 'Sign out realizado com sucesso!' };
