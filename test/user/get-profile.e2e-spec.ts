@@ -8,6 +8,11 @@ import { AppModule } from '../../src/app.module';
 import { User } from '../../src/database/entities/User';
 
 describe('UserController (e2e) - Profile', () => {
+  const testUser = {
+    name: 'Test User',
+    email: 'profile@gmail.com',
+    password: 'password123',
+  };
   let app: INestApplication<App>;
   let accessToken: string;
 
@@ -23,14 +28,10 @@ describe('UserController (e2e) - Profile', () => {
       getRepositoryToken(User),
     );
 
-    await userRepository.delete({ email: 'test@example.com' });
+    await userRepository.delete({ email: testUser.email });
     const signUpResponse = await request(app.getHttpServer())
       .post('/auth/signup')
-      .send({
-        name: 'Test User',
-        email: 'test@example.com',
-        password: 'password123',
-      });
+      .send(testUser);
 
     accessToken = signUpResponse.body.accessToken;
   });
@@ -46,8 +47,8 @@ describe('UserController (e2e) - Profile', () => {
 
     expect(profileResponse.status).toBe(200);
     expect(profileResponse.body).toMatchObject({
-      email: 'test@example.com',
-      name: 'Test User',
+      email: testUser.email,
+      name: testUser.name,
     });
   });
 });

@@ -7,7 +7,12 @@ import { Repository } from 'typeorm';
 import { AppModule } from '../../src/app.module';
 import { User } from '../../src/database/entities/User';
 
-describe('AppController (e2e)', () => {
+describe('AuthController (e2e) - Refresh', () => {
+  const testUser = {
+    name: 'Test User',
+    email: 'refresh@gmail.com',
+    password: 'password123',
+  };
   let app: INestApplication<App>;
   let userRepository: Repository<User>;
   let accessToken: string;
@@ -25,12 +30,10 @@ describe('AppController (e2e)', () => {
       getRepositoryToken(User),
     );
 
-    await userRepository.delete({ email: 'test@example.com' });
-    const res = await request(app.getHttpServer()).post('/auth/signup').send({
-      name: 'Test User',
-      email: 'test@example.com',
-      password: 'password123',
-    });
+    await userRepository.delete({ email: testUser.email });
+    const res = await request(app.getHttpServer())
+      .post('/auth/signup')
+      .send(testUser);
 
     accessToken = res.body.accessToken;
     refreshToken = res.body.refreshToken;
@@ -79,7 +82,7 @@ describe('AppController (e2e)', () => {
 
   it("should return status 401 if user doesn't have a hashedRefreshToken", async () => {
     await userRepository.update(
-      { email: 'test@example.com' },
+      { email: testUser.email },
       { hashedRefreshToken: null },
     );
 

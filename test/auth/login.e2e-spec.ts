@@ -9,6 +9,17 @@ import { User } from '../../src/database/entities/User';
 import { AuthProvider } from '../../src/common/enums/auth-provider.enum';
 
 describe('AuthController (e2e) - Login', () => {
+  const testUser = {
+    name: 'Test User',
+    email: 'login@gmail.com',
+    password: 'password123',
+  };
+  const testOAuthUser = {
+    name: 'Test Google User',
+    email: 'oauth@google.com',
+    password: null,
+    authProvider: AuthProvider.GOOGLE,
+  };
   let app: INestApplication<App>;
 
   beforeEach(async () => {
@@ -24,21 +35,11 @@ describe('AuthController (e2e) - Login', () => {
     );
 
     await userRepository.delete({
-      email: In(['test@example.com', 'oauth@google.com']),
+      email: In([testUser.email, testOAuthUser.email]),
     });
 
-    await request(app.getHttpServer()).post('/auth/signup').send({
-      name: 'Test User',
-      email: 'test@example.com',
-      password: 'password123',
-    });
-
-    await userRepository.save({
-      name: 'Test Google User',
-      email: 'oauth@google.com',
-      password: null,
-      authProvider: AuthProvider.GOOGLE,
-    });
+    await request(app.getHttpServer()).post('/auth/signup').send(testUser);
+    await userRepository.save(testOAuthUser);
   });
 
   afterEach(async () => {
@@ -47,8 +48,8 @@ describe('AuthController (e2e) - Login', () => {
 
   it('should login user successfully', async () => {
     const res = await request(app.getHttpServer()).post('/auth/login').send({
-      email: 'test@example.com',
-      password: 'password123',
+      email: testUser.email,
+      password: testUser.password,
     });
 
     expect(res.status).toBe(200);
@@ -70,7 +71,7 @@ describe('AuthController (e2e) - Login', () => {
   it('should return 401 when password is missing', async () => {
     const res = await request(app.getHttpServer())
       .post('/auth/login')
-      .send({ email: 'test@example.com' });
+      .send({ email: testUser.email });
 
     expect(res.status).toBe(401);
   });
@@ -78,7 +79,7 @@ describe('AuthController (e2e) - Login', () => {
   it('should return 401 if user is not found', async () => {
     const res = await request(app.getHttpServer())
       .post('/auth/login')
-      .send({ email: 'unregistered@example.com', password: '12345' });
+      .send({ email: 'unregistered@gmail.com', password: '12345' });
 
     expect(res.status).toBe(401);
     expect(res.body).toEqual({
@@ -91,7 +92,7 @@ describe('AuthController (e2e) - Login', () => {
   it('should return 409 if user is registered with OAuth', async () => {
     const res = await request(app.getHttpServer())
       .post('/auth/login')
-      .send({ email: 'oauth@google.com', password: '12345' });
+      .send({ email: testOAuthUser.email, password: '12345' });
 
     expect(res.status).toBe(409);
     expect(res.body).toEqual({
@@ -104,7 +105,7 @@ describe('AuthController (e2e) - Login', () => {
   it("should return 400 if password doesn't match", async () => {
     const res = await request(app.getHttpServer())
       .post('/auth/login')
-      .send({ email: 'test@example.com', password: '12345' });
+      .send({ email: testUser.email, password: '12345' });
 
     expect(res.status).toBe(400);
     expect(res.body).toEqual({

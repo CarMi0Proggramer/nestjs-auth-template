@@ -8,6 +8,11 @@ import { AppModule } from '../../src/app.module';
 import { User } from '../../src/database/entities/User';
 
 describe('AuthController (e2e) - SignUp', () => {
+  const testUser = {
+    name: 'Test User',
+    email: 'signup@gmail.com',
+    password: 'password123',
+  };
   let app: INestApplication<App>;
 
   beforeEach(async () => {
@@ -26,7 +31,7 @@ describe('AuthController (e2e) - SignUp', () => {
     await app.init();
 
     const userRepository = app.get<Repository<User>>(getRepositoryToken(User));
-    await userRepository.delete({ email: 'carlos@google.com' });
+    await userRepository.delete({ email: testUser.email });
   });
 
   afterEach(async () => {
@@ -34,11 +39,9 @@ describe('AuthController (e2e) - SignUp', () => {
   });
 
   it('should sign up user successfully', async () => {
-    const res = await request(app.getHttpServer()).post('/auth/signup').send({
-      name: 'Carlos Miguel',
-      password: 'password123',
-      email: 'carlos@google.com',
-    });
+    const res = await request(app.getHttpServer())
+      .post('/auth/signup')
+      .send(testUser);
 
     expect(res.status).toBe(201);
     expect(res.body).toMatchObject({
@@ -67,12 +70,9 @@ describe('AuthController (e2e) - SignUp', () => {
   });
 
   it('should return status 401 if user with email exists', async () => {
-    const signUp = () =>
-      request(app.getHttpServer()).post('/auth/signup').send({
-        name: 'Carlos Miguel',
-        password: 'password123',
-        email: 'carlos@google.com',
-      });
+    const signUp = () => {
+      return request(app.getHttpServer()).post('/auth/signup').send(testUser);
+    };
 
     await signUp();
     const res = await signUp();

@@ -8,6 +8,11 @@ import { AppModule } from '../../src/app.module';
 import { User } from '../../src/database/entities/User';
 
 describe('AuthController (e2e) - SignOut', () => {
+  const testUser = {
+    name: 'Test User',
+    email: 'signout@gmail.com',
+    password: 'password123',
+  };
   let app: INestApplication<App>;
   let accessToken: string;
 
@@ -23,14 +28,10 @@ describe('AuthController (e2e) - SignOut', () => {
       getRepositoryToken(User),
     );
 
-    await userRepository.delete({ email: 'carlos@gmail.com' });
+    await userRepository.delete({ email: testUser.email });
     const signUpRes = await request(app.getHttpServer())
       .post('/auth/signup')
-      .send({
-        name: 'Carlos Miguel',
-        email: 'carlos@gmail.com',
-        password: 'password123',
-      });
+      .send(testUser);
 
     accessToken = signUpRes.body.accessToken;
   });
