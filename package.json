@@ -36,6 +36,7 @@
     "dotenv": "^17.2.3",
     "joi": "^18.0.2",
     "passport": "^0.7.0",
+    "passport-google-oauth20": "^2.0.0",
     "passport-jwt": "^4.0.1",
     "passport-local": "^1.0.0",
     "pg": "^8.16.3",
@@ -53,6 +54,7 @@
     "@types/express": "^5.0.0",
     "@types/jest": "^30.0.0",
     "@types/node": "^22.10.7",
+    "@types/passport-google-oauth20": "^2.0.17",
     "@types/passport-jwt": "^4.0.1",
     "@types/passport-local": "^1.0.38",
     "@types/supertest": "^6.0.2",
@@ -91,7 +93,8 @@
     "testEnvironment": "node",
     "moduleNameMapper": {
       "@/entities/(.*)$": "<rootDir>/database/entities/$1",
-      "@/common/(.*)$": "<rootDir>/common/$1"
+      "@/common/(.*)$": "<rootDir>/common/$1",
+      "@/config/(.*)$": "<rootDir>/config/$1"
     }
   }
 }

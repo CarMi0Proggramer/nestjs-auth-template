@@ -9,6 +9,7 @@
   "coverageDirectory": "coverage-e2e",
   "moduleNameMapper": {
     "@/entities/(.*)$": "<rootDir>/src/database/entities/$1",
-    "@/common/(.*)$": "<rootDir>/src/common/$1"
+    "@/common/(.*)$": "<rootDir>/src/common/$1",
+    "@/config/(.*)$": "<rootDir>/src/config/$1"
   }
 }

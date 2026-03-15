@@ -1,5 +1,5 @@
 import { join } from 'node:path';
-import { envs } from 'src/config/envs';
+import { envs } from '@/config/envs';
 import { DataSource } from 'typeorm';
 
 export const dataSource = new DataSource({

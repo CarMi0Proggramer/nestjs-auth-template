@@ -1,7 +1,7 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { join } from 'node:path';
-import { envs } from '../config/envs';
+import { envs } from '@/config/envs';
 
 @Module({
   imports: [
