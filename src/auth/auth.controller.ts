@@ -9,13 +9,13 @@ import {
 import { SignUpDto } from './dto/signup.dto';
 import { AuthService } from './auth.service';
 import { LocalAuthGuard, RefreshJwtAuthGuard } from './guards';
-import { Public, User } from '@/common/decorators';
+import { SkipJwtGuard, User } from '@/common/decorators';
 
 @Controller('auth')
 export class AuthController {
   constructor(private readonly authService: AuthService) {}
 
-  @Public()
+  @SkipJwtGuard()
   @HttpCode(HttpStatus.OK)
   @UseGuards(LocalAuthGuard)
   @Post('login')
@@ -25,18 +25,21 @@ export class AuthController {
     return { id: userId, accessToken, refreshToken };
   }
 
-  @Public()
+  @SkipJwtGuard()
   @Post('signup')
   async signUp(@Body() signUpDto: SignUpDto) {
     return this.authService.signUp(signUpDto);
   }
 
+  @SkipJwtGuard()
+  @HttpCode(HttpStatus.OK)
   @UseGuards(RefreshJwtAuthGuard)
   @Post('refresh')
   refreshToken(@User('id') userId: string) {
     return this.authService.refreshToken(userId);
   }
 
+  @HttpCode(HttpStatus.OK)
   @Post('signout')
   async signOut(@User('id') userId: string) {
     await this.authService.signOut(userId);

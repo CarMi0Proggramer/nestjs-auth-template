@@ -1,6 +1,6 @@
 import { Reflector } from '@nestjs/core';
 import { JwtAuthGuard } from './jwt.guard';
-import { IS_PUBLIC_KEY } from '@/common/decorators/public.decorator';
+import { SKIP_JWT_GUARD_KEY } from '@/common/decorators/skip-jwt-guard.decorator';
 import { ExecutionContext } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 
@@ -12,7 +12,7 @@ describe('JwtAuthGuard', () => {
     getHandler: jest.fn().mockReturnValue('GET_HANDLER'),
   } as unknown as ExecutionContext;
 
-  it('should return true if route is mark as public', () => {
+  it('should return true if guard is marked as skipped', () => {
     const reflectorSpy = jest
       .spyOn(reflector, 'getAllAndOverride')
       .mockImplementation(() => true);
@@ -20,13 +20,13 @@ describe('JwtAuthGuard', () => {
     const result = guard.canActivate(mockExecutionContext);
 
     expect(result).toBeTruthy();
-    expect(reflectorSpy).toHaveBeenCalledWith(IS_PUBLIC_KEY, [
+    expect(reflectorSpy).toHaveBeenCalledWith(SKIP_JWT_GUARD_KEY, [
       mockExecutionContext.getHandler(),
       mockExecutionContext.getClass(),
     ]);
   });
 
-  it('should call super.canActivate is route is not public', () => {
+  it('should call super.canActivate if route does not skip guard', () => {
     jest.spyOn(reflector, 'getAllAndOverride').mockReturnValue(false);
 
     const superSpy = jest
