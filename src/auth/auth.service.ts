@@ -56,7 +56,7 @@ export class AuthService {
     const accessToken = await this.jwtService.signAsync(payload);
     const refreshToken = await this.jwtService.signAsync(payload, {
       secret: envs.refreshJwtSecret,
-      expiresIn: envs.refreshJwtExpireIn,
+      expiresIn: envs.refreshJwtExpiresIn,
     } as JwtSignOptions);
 
     return { accessToken, refreshToken };

@@ -23,7 +23,7 @@ import { JwtAuthGuard } from './guards';
       secret: envs.jwtSecret,
       signOptions: {
         // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-        expiresIn: envs.jwtExpireIn as any,
+        expiresIn: envs.jwtExpiresIn as any,
       },
     }),
   ],

@@ -10,9 +10,9 @@ interface EnvVars {
   PORT: number;
   DATABASE_URL: string;
   JWT_SECRET: string;
-  JWT_EXPIRE_IN: string;
+  JWT_EXPIRES_IN: string;
   REFRESH_JWT_SECRET: string;
-  REFRESH_JWT_EXPIRE_IN: string;
+  REFRESH_JWT_EXPIRES_IN: string;
   GOOGLE_CLIENT_ID: string;
   GOOGLE_SECRET: string;
   GOOGLE_CALLBACK_URL: string;
@@ -24,9 +24,9 @@ const envsSchema = joi
     PORT: joi.number().required(),
     DATABASE_URL: joi.string().required(),
     JWT_SECRET: joi.string().required(),
-    JWT_EXPIRE_IN: joi.string().required(),
+    JWT_EXPIRES_IN: joi.string().required(),
     REFRESH_JWT_SECRET: joi.string().required(),
-    REFRESH_JWT_EXPIRE_IN: joi.string().required(),
+    REFRESH_JWT_EXPIRES_IN: joi.string().required(),
     GOOGLE_CLIENT_ID: joi.string().required(),
     GOOGLE_SECRET: joi.string().required(),
     GOOGLE_CALLBACK_URL: joi.string().required(),
@@ -48,9 +48,9 @@ export const envs = {
   port: envVars.PORT,
   databaseUrl: envVars.DATABASE_URL,
   jwtSecret: envVars.JWT_SECRET,
-  jwtExpireIn: envVars.JWT_EXPIRE_IN,
+  jwtExpiresIn: envVars.JWT_EXPIRES_IN,
   refreshJwtSecret: envVars.REFRESH_JWT_SECRET,
-  refreshJwtExpireIn: envVars.REFRESH_JWT_EXPIRE_IN,
+  refreshJwtExpiresIn: envVars.REFRESH_JWT_EXPIRES_IN,
   googleClientId: envVars.GOOGLE_CLIENT_ID,
   googleSecret: envVars.GOOGLE_SECRET,
   googleCallbackUrl: envVars.GOOGLE_CALLBACK_URL,
