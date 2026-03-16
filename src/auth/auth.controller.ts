@@ -14,11 +14,19 @@ import { AuthService } from './auth.service';
 import { GoogleAuthGuard, LocalAuthGuard, RefreshJwtAuthGuard } from './guards';
 import { SkipJwtGuard, User } from '@/common/decorators';
 import { envs } from '@/config/envs';
+import {
+  ApiGoogleCallback,
+  ApiGoogleLogin,
+  ApiLogin,
+  ApiRefresh,
+  ApiSignUp,
+} from './swagger';
 
 @Controller('auth')
 export class AuthController {
   constructor(private readonly authService: AuthService) {}
 
+  @ApiLogin()
   @SkipJwtGuard()
   @HttpCode(HttpStatus.OK)
   @UseGuards(LocalAuthGuard)
@@ -29,12 +37,14 @@ export class AuthController {
     return { id: userId, accessToken, refreshToken };
   }
 
+  @ApiSignUp()
   @SkipJwtGuard()
   @Post('signup')
   async signUp(@Body() signUpDto: SignUpDto) {
     return this.authService.signUp(signUpDto);
   }
 
+  @ApiRefresh()
   @SkipJwtGuard()
   @HttpCode(HttpStatus.OK)
   @UseGuards(RefreshJwtAuthGuard)
@@ -51,11 +61,13 @@ export class AuthController {
     return { message: 'Sign out realizado com sucesso!' };
   }
 
+  @ApiGoogleLogin()
   @SkipJwtGuard()
   @UseGuards(GoogleAuthGuard)
   @Get('google')
   googleLogin() {}
 
+  @ApiGoogleCallback()
   @SkipJwtGuard()
   @UseGuards(GoogleAuthGuard)
   @Get('google/callback')

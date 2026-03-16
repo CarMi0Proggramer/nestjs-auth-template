@@ -2,6 +2,7 @@ import { Test, TestingModule } from '@nestjs/testing';
 import {
   BadRequestException,
   ConflictException,
+  NotFoundException,
   UnauthorizedException,
 } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
@@ -144,14 +145,14 @@ describe('AuthService', () => {
     expect(result).toEqual({ id: userId });
   });
 
-  it('should throw UnauthorizedException when validateUser receives unregistered email', async () => {
+  it('should throw NotFoundException when validateUser receives unregistered email', async () => {
     const email = 'carlos@test.com';
     const password = '12345';
 
     mockUserService.findOneByEmail.mockResolvedValue(null);
 
     await expect(service.validateUser(email, password)).rejects.toThrow(
-      new UnauthorizedException('Usuário não encontrado'),
+      new NotFoundException('Usuário não encontrado'),
     );
   });
 

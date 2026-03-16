@@ -2,6 +2,7 @@ import {
   BadRequestException,
   ConflictException,
   Injectable,
+  NotFoundException,
   UnauthorizedException,
 } from '@nestjs/common';
 import { JwtService, JwtSignOptions } from '@nestjs/jwt';
@@ -67,7 +68,7 @@ export class AuthService {
 
   async validateUser(email: string, password: string) {
     const user = await this.userService.findOneByEmail(email);
-    if (!user) throw new UnauthorizedException('Usuário não encontrado');
+    if (!user) throw new NotFoundException('Usuário não encontrado');
     if (!user.password) {
       throw new ConflictException('Este e-mail já está cadastrado com Google.');
     }

@@ -76,16 +76,16 @@ describe('AuthController (e2e) - Login', () => {
     expect(res.status).toBe(401);
   });
 
-  it('should return 401 if user is not found', async () => {
+  it('should return 404 if user is not found', async () => {
     const res = await request(app.getHttpServer())
       .post('/auth/login')
       .send({ email: 'unregistered@gmail.com', password: '12345' });
 
-    expect(res.status).toBe(401);
+    expect(res.status).toBe(404);
     expect(res.body).toEqual({
       message: 'Usuário não encontrado',
-      error: 'Unauthorized',
-      statusCode: 401,
+      error: 'Not Found',
+      statusCode: 404,
     });
   });
 
