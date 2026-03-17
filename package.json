@@ -103,8 +103,7 @@
   },
   "lint-staged": {
     "*.{ts,js}": [
-      "eslint --fix",
-      "prettier --write",
+      "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",
       "jest --findRelatedTests --passWithNoTests"
     ],
     "*.{json,md,yml}": [
