@@ -38,7 +38,9 @@ It includes:
 - Swagger API Documentation
 - Unit Tests
 - E2E Tests
-- CI/CD Pipeline
+- Dedicated test database for E2E tests
+- CI/CD Pipeline with GitHub Actions
+- Service container database for CI testing
 - Husky Git Hooks
 - Lint-staged Code Quality
 - SWC as the compiler
@@ -196,6 +198,23 @@ pnpm run test:e2e:watch
 ```bash
 pnpm run test:e2e:cov
 ```
+
+### E2E Testing Environment
+
+End-to-end tests run against a **dedicated testing database**.
+
+- In **CI/CD**, a temporary PostgreSQL database is created using a **service container** inside the GitHub Actions workflow.
+- In **local development**, environment variables are loaded from the `.env.test` file.
+
+This allows tests to run in complete isolation from the development database.
+
+You can configure the test database to use:
+
+- a local PostgreSQL instance
+- a cloud database
+- or a Docker container
+
+by updating the values in `.env.test`.
 
 # Database Migrations:
 
