@@ -64,7 +64,6 @@ describe('AuthService', () => {
 
     const result = await service.signUp(dto);
 
-    expect(userService.findOneByEmail).toHaveBeenCalledWith(dto.email);
     expect(userService.create).toHaveBeenCalledWith({
       ...dto,
       authProvider: AuthProvider.LOCAL,
@@ -88,11 +87,13 @@ describe('AuthService', () => {
       password: '12345',
     };
 
-    mockUserService.findOneByEmail.mockResolvedValue(true);
+    mockUserService.create.mockRejectedValue({ code: '23505' });
 
     await expect(service.signUp(dto)).rejects.toThrow(
       new UnauthorizedException('Já existe um usuário com este e-mail.'),
     );
+
+    mockUserService.create.mockReset();
   });
 
   it('should login user, return their tokens and update their hashed refresh token', async () => {

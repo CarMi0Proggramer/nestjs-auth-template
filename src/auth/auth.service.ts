@@ -24,19 +24,23 @@ export class AuthService {
   ) {}
 
   async signUp(signUpDto: SignUpDto) {
-    const userExists = await this.userService.findOneByEmail(signUpDto.email);
-    if (userExists) {
-      throw new UnauthorizedException('Já existe um usuário com este e-mail.');
+    try {
+      const user = await this.userService.create({
+        ...signUpDto,
+        authProvider: AuthProvider.LOCAL,
+      });
+
+      const { accessToken, refreshToken } = await this.login(user.id);
+
+      return { id: user.id, accessToken, refreshToken };
+    } catch (error) {
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+      if (error.code === '23505') {
+        throw new UnauthorizedException(
+          'Já existe um usuário com este e-mail.',
+        );
+      }
     }
-
-    const user = await this.userService.create({
-      ...signUpDto,
-      authProvider: AuthProvider.LOCAL,
-    });
-
-    const { accessToken, refreshToken } = await this.login(user.id);
-
-    return { id: user.id, accessToken, refreshToken };
   }
 
   login(userId: string) {
