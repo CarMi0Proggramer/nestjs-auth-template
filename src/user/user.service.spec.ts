@@ -96,7 +96,7 @@ describe('UserService', () => {
     mockUserRepository.findOne.mockResolvedValue(null);
 
     await expect(service.getProfile('UNKNOWN_ID')).rejects.toThrow(
-      new NotFoundException('O usuário não foi encontrado'),
+      new NotFoundException('User not found'),
     );
   });
 });

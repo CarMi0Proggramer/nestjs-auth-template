@@ -14,9 +14,7 @@ export const getUser = (
   const user = req.user as Pick<UserEntity, 'id'> | undefined;
 
   if (!user) {
-    throw new InternalServerErrorException(
-      'O usuário não foi encontrado na request',
-    );
+    throw new InternalServerErrorException('User not found in request');
   }
 
   return userField ? user[userField] : user;

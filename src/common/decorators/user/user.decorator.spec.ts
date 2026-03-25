@@ -33,9 +33,7 @@ describe('UserDecorator', () => {
     } as unknown as ExecutionContext;
 
     expect(() => getUser(undefined, mockExecutionContext)).toThrow(
-      new InternalServerErrorException(
-        'O usuário não foi encontrado na request',
-      ),
+      new InternalServerErrorException('User not found in request'),
     );
   });
 });

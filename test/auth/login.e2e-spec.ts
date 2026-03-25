@@ -83,7 +83,7 @@ describe('AuthController (e2e) - Login', () => {
 
     expect(res.status).toBe(404);
     expect(res.body).toEqual({
-      message: 'Usuário não encontrado',
+      message: 'User not found',
       error: 'Not Found',
       statusCode: 404,
     });
@@ -96,7 +96,7 @@ describe('AuthController (e2e) - Login', () => {
 
     expect(res.status).toBe(409);
     expect(res.body).toEqual({
-      message: 'Este e-mail já está cadastrado com Google.',
+      message: 'This email is registered with Google.',
       error: 'Conflict',
       statusCode: 409,
     });
@@ -109,7 +109,7 @@ describe('AuthController (e2e) - Login', () => {
 
     expect(res.status).toBe(400);
     expect(res.body).toEqual({
-      message: 'Credenciais inválidas',
+      message: 'Invalid credentials',
       error: 'Bad Request',
       statusCode: 400,
     });

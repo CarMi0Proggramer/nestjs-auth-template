@@ -22,7 +22,7 @@ export class RefreshJwtStrategy extends PassportStrategy(
   validate(req: Request, payload: AuthJwtPayload) {
     const refreshToken = req.get('Authorization')?.replace('Bearer', '').trim();
     if (!refreshToken)
-      throw new UnauthorizedException('Refresh token não fornecido');
+      throw new UnauthorizedException('Refresh token not provided');
 
     return this.authService.validateRefreshToken(payload.sub, refreshToken);
   }

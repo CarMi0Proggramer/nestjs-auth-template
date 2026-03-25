@@ -91,7 +91,7 @@ describe('AuthService', () => {
     mockUserService.create.mockRejectedValue({ code: '23505' });
 
     await expect(service.signUp(dto)).rejects.toThrow(
-      new UnauthorizedException('Já existe um usuário com este e-mail.'),
+      new UnauthorizedException('User already exists.'),
     );
 
     mockUserService.create.mockReset();
@@ -107,7 +107,7 @@ describe('AuthService', () => {
     mockUserService.create.mockRejectedValue({});
 
     await expect(service.signUp(dto)).rejects.toThrow(
-      new InternalServerErrorException('Error do servidor'),
+      new InternalServerErrorException('Internal error. Check server logs!'),
     );
 
     mockUserService.create.mockReset();
@@ -170,7 +170,7 @@ describe('AuthService', () => {
     mockUserService.findOneByEmail.mockResolvedValue(null);
 
     await expect(service.validateUser(email, password)).rejects.toThrow(
-      new NotFoundException('Usuário não encontrado'),
+      new NotFoundException('User not found'),
     );
   });
 
@@ -181,7 +181,7 @@ describe('AuthService', () => {
     mockUserService.findOneByEmail.mockResolvedValue({ id: 'USER_ID' });
 
     await expect(service.validateUser(email, password)).rejects.toThrow(
-      new ConflictException('Este e-mail já está cadastrado com Google.'),
+      new ConflictException('This email is registered with Google.'),
     );
   });
 
@@ -197,7 +197,7 @@ describe('AuthService', () => {
     (bcrypt.compare as jest.Mock).mockResolvedValue(false);
 
     await expect(service.validateUser(email, password)).rejects.toThrow(
-      new BadRequestException('Credenciais inválidas'),
+      new BadRequestException('Invalid credentials'),
     );
   });
 
@@ -224,7 +224,7 @@ describe('AuthService', () => {
 
     await expect(
       service.validateRefreshToken(userId, refreshToken),
-    ).rejects.toThrow(new UnauthorizedException('Refresh token inválido'));
+    ).rejects.toThrow(new UnauthorizedException('Invalid refresh token'));
   });
 
   it('should throw UnauthorizedException when validateRefreshToken finds user without hashed refresh token', async () => {
@@ -235,7 +235,7 @@ describe('AuthService', () => {
 
     await expect(
       service.validateRefreshToken(userId, refreshToken),
-    ).rejects.toThrow(new UnauthorizedException('Refresh token inválido'));
+    ).rejects.toThrow(new UnauthorizedException('Invalid refresh token'));
   });
 
   it('should throw UnauthorizedException when validateRefreshToken receives mismatched token', async () => {
@@ -250,7 +250,7 @@ describe('AuthService', () => {
 
     await expect(
       service.validateRefreshToken(userId, refreshToken),
-    ).rejects.toThrow(new UnauthorizedException('Refresh token inválido'));
+    ).rejects.toThrow(new UnauthorizedException('Invalid refresh token'));
   });
 
   it('should store google user if not exists', async () => {

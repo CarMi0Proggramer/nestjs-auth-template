@@ -48,7 +48,7 @@ describe('RefreshJwtStrategy', () => {
     } as unknown as Request;
 
     expect(() => strategy.validate(req, payload)).toThrow(
-      new UnauthorizedException('Refresh token não fornecido'),
+      new UnauthorizedException('Refresh token not provided'),
     );
   });
 });

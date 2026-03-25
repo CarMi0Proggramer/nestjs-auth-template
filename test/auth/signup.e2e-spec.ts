@@ -57,12 +57,12 @@ describe('AuthController (e2e) - SignUp', () => {
     expect(res.status).toBe(400);
     expect(res.body).toEqual({
       message: [
-        'O nome é obrigatório',
-        'O nome não pode ser vazio',
-        'O email é obrigatório',
-        'O email deve ser válido',
-        'A senha é obrigatória',
-        'A senha deve ter no mínimo 6 caracteres',
+        'name must be a string',
+        'name should not be empty',
+        'email must be a string',
+        'email must be an email',
+        'password must be a string',
+        'password must be longer than or equal to 6 characters',
       ],
       error: 'Bad Request',
       statusCode: 400,
@@ -80,7 +80,7 @@ describe('AuthController (e2e) - SignUp', () => {
     expect(res.status).toBe(401);
     expect(res.body).toEqual({
       error: 'Unauthorized',
-      message: 'Já existe um usuário com este e-mail.',
+      message: 'User already exists.',
       statusCode: 401,
     });
   });

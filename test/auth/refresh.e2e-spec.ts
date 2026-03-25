@@ -75,7 +75,7 @@ describe('AuthController (e2e) - Refresh', () => {
     expect(res.status).toBe(401);
     expect(res.body).toEqual({
       error: 'Unauthorized',
-      message: 'Refresh token inválido',
+      message: 'Invalid refresh token',
       statusCode: 401,
     });
   });
@@ -93,7 +93,7 @@ describe('AuthController (e2e) - Refresh', () => {
     expect(res.status).toBe(401);
     expect(res.body).toEqual({
       error: 'Unauthorized',
-      message: 'Refresh token inválido',
+      message: 'Invalid refresh token',
       statusCode: 401,
     });
   });

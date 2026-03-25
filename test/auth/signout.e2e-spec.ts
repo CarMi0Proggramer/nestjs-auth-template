@@ -47,7 +47,7 @@ describe('AuthController (e2e) - SignOut', () => {
 
     expect(res.status).toBe(200);
     expect(res.body).toEqual({
-      message: 'Sign out realizado com sucesso!',
+      message: 'Sign out made successfully!',
     });
   });
 

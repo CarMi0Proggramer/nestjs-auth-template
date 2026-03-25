@@ -82,7 +82,7 @@ describe('AuthController', () => {
 
     expect(authService.signOut).toHaveBeenCalledWith(userId);
     expect(result).toEqual({
-      message: 'Sign out realizado com sucesso!',
+      message: 'Sign out made successfully!',
     });
   });
 

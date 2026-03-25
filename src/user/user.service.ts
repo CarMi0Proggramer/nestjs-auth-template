@@ -37,7 +37,7 @@ export class UserService {
       select: ['email', 'name'],
     });
 
-    if (!user) throw new NotFoundException('O usuário não foi encontrado');
+    if (!user) throw new NotFoundException('User not found');
 
     return user;
   }

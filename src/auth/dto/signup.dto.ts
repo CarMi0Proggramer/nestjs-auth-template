@@ -3,27 +3,27 @@ import { IsEmail, IsNotEmpty, IsString, MinLength } from 'class-validator';
 
 export class SignUpDto {
   @ApiProperty({
-    description: 'Nome do usuário',
+    description: 'Username',
     example: 'John Doe',
   })
-  @IsNotEmpty({ message: 'O nome não pode ser vazio' })
-  @IsString({ message: 'O nome é obrigatório' })
+  @IsNotEmpty()
+  @IsString()
   name: string;
 
   @ApiProperty({
-    description: 'Email do usuário',
+    description: 'Email',
     example: 'johndoe@gmail.com',
   })
-  @IsEmail({}, { message: 'O email deve ser válido' })
-  @IsString({ message: 'O email é obrigatório' })
+  @IsEmail()
+  @IsString()
   email: string;
 
   @ApiProperty({
-    description: 'Senha da conta',
+    description: 'Password',
     example: 'john1234',
     minLength: 6,
   })
-  @MinLength(6, { message: 'A senha deve ter no mínimo 6 caracteres' })
-  @IsString({ message: 'A senha é obrigatória' })
+  @MinLength(6)
+  @IsString()
   password: string;
 }

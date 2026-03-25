@@ -37,12 +37,12 @@ export class AuthService {
     } catch (error) {
       // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
       if (error.code === '23505') {
-        throw new UnauthorizedException(
-          'Já existe um usuário com este e-mail.',
-        );
+        throw new UnauthorizedException('User already exists.');
       }
 
-      throw new InternalServerErrorException('Error do servidor');
+      throw new InternalServerErrorException(
+        'Internal error. Check server logs!',
+      );
     }
   }
 
@@ -75,15 +75,14 @@ export class AuthService {
 
   async validateUser(email: string, password: string) {
     const user = await this.userService.findOneByEmail(email);
-    if (!user) throw new NotFoundException('Usuário não encontrado');
+    if (!user) throw new NotFoundException('User not found');
     if (!user.password) {
-      throw new ConflictException('Este e-mail já está cadastrado com Google.');
+      throw new ConflictException('This email is registered with Google.');
     }
 
     const isPasswordMatch = await bcrypt.compare(password, user.password);
 
-    if (!isPasswordMatch)
-      throw new BadRequestException('Credenciais inválidas');
+    if (!isPasswordMatch) throw new BadRequestException('Invalid credentials');
 
     return { id: user.id };
   }
@@ -92,7 +91,7 @@ export class AuthService {
     const user = await this.userService.findOne(userId);
 
     if (!user || !user.hashedRefreshToken)
-      throw new UnauthorizedException('Refresh token inválido');
+      throw new UnauthorizedException('Invalid refresh token');
 
     const refreshTokenMatches = await argon2.verify(
       user.hashedRefreshToken,
@@ -100,7 +99,7 @@ export class AuthService {
     );
 
     if (!refreshTokenMatches)
-      throw new UnauthorizedException('Refresh token inválido');
+      throw new UnauthorizedException('Invalid refresh token');
 
     return { id: userId };
   }

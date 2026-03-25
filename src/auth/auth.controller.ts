@@ -58,7 +58,7 @@ export class AuthController {
   async signOut(@User('id') userId: string) {
     await this.authService.signOut(userId);
 
-    return { message: 'Sign out realizado com sucesso!' };
+    return { message: 'Sign out made successfully!' };
   }
 
   @ApiGoogleLogin()
