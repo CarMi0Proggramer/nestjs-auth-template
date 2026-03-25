@@ -2,6 +2,7 @@ import { Test, TestingModule } from '@nestjs/testing';
 import {
   BadRequestException,
   ConflictException,
+  InternalServerErrorException,
   NotFoundException,
   UnauthorizedException,
 } from '@nestjs/common';
@@ -91,6 +92,22 @@ describe('AuthService', () => {
 
     await expect(service.signUp(dto)).rejects.toThrow(
       new UnauthorizedException('Já existe um usuário com este e-mail.'),
+    );
+
+    mockUserService.create.mockReset();
+  });
+
+  it('should throw an internal server error if an unknown error happens', async () => {
+    const dto: SignUpDto = {
+      name: 'Carlos Miguel',
+      email: 'carlos@test.com',
+      password: '12345',
+    };
+
+    mockUserService.create.mockRejectedValue({});
+
+    await expect(service.signUp(dto)).rejects.toThrow(
+      new InternalServerErrorException('Error do servidor'),
     );
 
     mockUserService.create.mockReset();

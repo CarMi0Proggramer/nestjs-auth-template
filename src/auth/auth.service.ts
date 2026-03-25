@@ -2,6 +2,7 @@ import {
   BadRequestException,
   ConflictException,
   Injectable,
+  InternalServerErrorException,
   NotFoundException,
   UnauthorizedException,
 } from '@nestjs/common';
@@ -40,6 +41,8 @@ export class AuthService {
           'Já existe um usuário com este e-mail.',
         );
       }
+
+      throw new InternalServerErrorException('Error do servidor');
     }
   }
 
